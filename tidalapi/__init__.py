@@ -211,7 +211,7 @@ class Session(object):
 
 
 def _parse_artist(json_obj):
-    return Artist(id=json_obj['id'], name=json_obj['name'], role=Role(json_obj['type']))
+    return Artist(id=json_obj['id'], name=json_obj['name'], role=Role(json_obj.get('type', 'MAIN')))
 
 
 def _parse_artists(json_obj):
@@ -231,7 +231,7 @@ def _parse_album(json_obj, artist=None, artists=None):
         'artist': artist,
         'artists': artists,
     }
-    if 'releaseDate' in json_obj:
+    if 'releaseDate' in json_obj and json_obj['releaseDate']:
         try:
             kwargs['release_date'] = datetime.datetime(*map(int, json_obj['releaseDate'].split('-')))
         except ValueError:
